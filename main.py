@@ -37,4 +37,31 @@ if analyze and file:
             st.error("File does not have any content.")
             st.stop()
 
-        prompt = f""""""
+        prompt = f"""Please analyze this resume and provide constructive feedback.
+            Focus on the following aspects:
+            1. Content clarity and impact
+            2. Skills presentation
+            3. Experience descriptions
+            4. Specific improvements for {job_role if job_role else 'general job applications'}
+
+            Resume content:
+            {file_content}
+
+            Please provide your analysis in a clear, structured format with specific recommendations."""
+
+        response = ollama.chat(model = "",
+        message = [
+            {
+                "role":"system",
+                "content":"""You are an expert CV/resume reviewer 
+                with years of experience in HR and recruitment"""},
+            {
+                "role":"user",
+                "content": prompt}
+        ])
+
+        st.markdown("### Analysis Results")
+        st.markdown(response.choices[0].message.content)
+
+    except Exception as e:
+        st.error(f"An error occured: {str(e)}")

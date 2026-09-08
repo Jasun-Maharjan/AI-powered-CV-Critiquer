@@ -37,20 +37,50 @@ if analyze and file:
             st.error("File does not have any content.")
             st.stop()
 
-        prompt = f"""Please analyze this resume and provide constructive feedback.
-            Focus on the following aspects:
-            1. Content clarity and impact
-            2. Skills presentation
-            3. Experience descriptions
-            4. Specific improvements for {job_role if job_role else 'general job applications'}
+        prompt = f"""You are reviewing a resume for a candidate applying to {job_role if job_role else 'a general job application'}.
+                Analyze ONLY the content provided below — do not assume or invent details that aren't present.
 
-            Resume content:
-            {file_content}
+                Evaluate the resume across these five areas:
+                1. **First Impression & Structure**
+                - Is the layout clean, scannable, and professional?
+                - Are section headings clear and conventional?
+                2. **Content Clarity & Impact**
+                - Are bullet points results-oriented rather than just listing duties?
+                - Are achievements quantified (numbers, percentages, timeframes) where possible?
+                3. **Skills Presentation**
+                - Are skills relevant, well-organized, and free of redundancy?
+                - Are the most in-demand/relevant skills for the target role easy to find?
+                4. **Experience Descriptions**
+                - Do bullet points start with strong action verbs?
+                - Is there a clear sense of scope, ownership, and outcome for each role/project?
+                5. **Role Fit — {job_role if job_role else 'General Applications'}**
+                - What's missing or under-emphasized for this specific type of role?
+                - What should be added, cut, or reworded to better match it?
 
-            Please provide your analysis in a clear, structured format with specific recommendations."""
+                For your response, follow this exact format:
+                ## Overall Score: X/10
+                One or two sentences summarizing the resume's overall strength.
 
-        response = ollama.chat(model = "",
-        message = [
+                ## Top 3 Strengths
+                - ...
+
+                ## Top 3 Areas to Improve
+                - ...
+
+                ## Detailed Feedback
+                (Organized under the five headings above — 2-4 bullet points each, specific and actionable. Reference actual content from the resume where relevant, not generic advice.)
+
+                ## Suggested Rewrites
+                Pick 2-3 of the weakest bullet points from the resume and show a "before → after" rewrite.
+
+                Resume content:
+                \"\"\"
+                {file_content}
+                \"\"\"
+                """
+
+        response = ollama.chat(model = "llama3.2",
+        messages = [
             {
                 "role":"system",
                 "content":"""You are an expert CV/resume reviewer 
@@ -61,7 +91,7 @@ if analyze and file:
         ])
 
         st.markdown("### Analysis Results")
-        st.markdown(response.choices[0].message.content)
+        st.markdown(response['message']['content'])
 
     except Exception as e:
         st.error(f"An error occured: {str(e)}")

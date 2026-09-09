@@ -95,3 +95,5 @@ if analyze and file:
 
     except Exception as e:
         st.error(f"An error occured: {str(e)}")
+
+    st.download_button("Download Report", response['message']['content'], file_name="cv_feedback.md")

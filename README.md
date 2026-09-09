@@ -23,6 +23,7 @@ Example output for a CV targeted at an "AI Intern" role:
 - **Experience Descriptions** — recommends action verbs, specificity, and impact-focused phrasing
 - **Specific Improvements** for the target role — e.g., highlighting AI/ML skills and relevant projects for an AI Intern position
 - **Additional Recommendations** and a numbered **Action Plan** to guide revisions
+
 ## Tech Stack
  
 | Component | Purpose |

@@ -2,6 +2,7 @@ import streamlit as st
 import PyPDF2
 import io
 import os
+import docx
 from dotenv import load_dotenv
 import ollama
 
@@ -24,9 +25,23 @@ def extract_content_pdf(pdf_file):
         text += page.extract_text() + "\n"
     return text
 
+def extract_content_docx(docx_bytes):
+    document = docx.Document(docx_bytes)
+    parts = [p.text for p in document.paragraphs if p.text.strip()]
+    for table in document.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                if cell.text.strip():
+                    parts.append(cell.text)
+    return "\n".join(parts)
+
 def extract_content_file(file):
+    ext = file.name.rsplit(".", 1)[-1].lower()
+    raw = file.read()
     if file.type == "application/pdf":
         return extract_content_pdf(io.BytesIO(file.read()))
+    elif ext == "docx":
+        return extract_content_docx(io.BytesIO(raw))
     return file.read().decode("utf-8")
 
 if analyze and file:

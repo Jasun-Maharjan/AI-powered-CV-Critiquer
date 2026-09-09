@@ -55,22 +55,6 @@ Example output for a CV targeted at an "AI Intern" role:
   ollama pull llama3.2
 ```
  
-## Installation
- 
-```bash
-git clone <your-repo-url>
-cd ai-cv-critiquer
-pip install -r requirements.txt
-```
- 
-**requirements.txt**
-```
-streamlit
-PyPDF2
-python-dotenv
-ollama
-```
- 
 ## Usage
  
 1. Start Ollama (if not already running):
